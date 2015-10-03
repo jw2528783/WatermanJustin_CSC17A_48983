@@ -14,7 +14,7 @@ void outputA (int[],int); //outputs an array
 void sortA (int[],int); //sorts an array
 void modeA (int[],int); //finds mode of an array
 float meanA (int[],int); //finds average of an array
-float medianA (int[],int); //finds median of an array
+void medianA (int[],int); //finds median of an array
 
 int main(int argc, char** argv) {
     srand(static_cast<unsigned int>(time(0))); //Random number generator
@@ -32,7 +32,8 @@ int main(int argc, char** argv) {
     cout<<endl<<endl;
     modeA (array,perLine); //calls function to find the mode of the array
     cout<<"The average of this array is "<<meanA (array,perLine)<<endl; //calls function to find the average of the array
-    cout<<"The median of this array is "<<medianA (array,perLine)<<endl; //calls function to find the median of the array
+    //cout<<"The median of this array is "<<medianA (array,perLine)<<endl; //calls function to find the median of the array
+    medianA (array,perLine);
     cout<<endl;
     return 0;
 }
@@ -81,18 +82,21 @@ void modeA (int array[],int n){
         }
         else counter=1;
     }
-    cout<<"The mode of this array is "<<mode<<endl; //output the mode
+    cout<<"The mode of this array is "<<mode; //output the mode
+    cout<<" . The max frequency of it is "<<max<<endl; //output max frequency of a mode
 }
 
 float meanA (int array[],int n){
+    //declare mean variable
     float mean=0;
-    for(int i=0;i<n;i++)mean+=array[i];
-    return mean/n;
+    for(int i=0;i<n;i++)mean+=array[i]; //loop and add up each array number
+    return mean/n; //return total number divided by the array size
 }
 
-float medianA (int array[],int n){
-    if(n%2==1)return array[((n+1)/2)-1];
-    else{
-        return ((array[n/2]+array[(n/2)+1])/2);
+void medianA (int array[],int n){
+    if(n%2==1)cout<<"The median of this array is "<<array[((n+1)/2)-1]; //if array is odd
+    else{ //if array is even
+        cout<<"The medians of this array are "<<array[(n/2)-1]<<" and "<<array[n/2];
+        cout<<" . Which averages to "<<(array[(n/2)-1]+array[n/2])/2<<" ."<<endl;
     }
 }
