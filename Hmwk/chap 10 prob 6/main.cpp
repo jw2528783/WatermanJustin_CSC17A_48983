@@ -33,6 +33,7 @@ int main(int argc, char** argv) {
             case 'E':case 'e':return 0;
             default:cout<<"Your choice is invalid"<<endl;
         }
+        cin.ignore();
     }while(choice=='D');
     return 0;
 }
