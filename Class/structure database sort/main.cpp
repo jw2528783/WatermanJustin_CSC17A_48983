@@ -9,6 +9,8 @@
 //HW: Convert this to dot notation for the dereferencing. 
 //      Then pointer notation for the arrays.
 
+//Completed. Entire program in dot notation for dereferencing
+
 #include <cstdlib>
 #include <iostream>
 #include <ctime>
@@ -27,20 +29,20 @@ int main(int argc, char** argv) {
     indexcolumn *structure=fill(n);
     cout<<"The original index array"<<endl;
     //Print structure/index
-    printArray(structure->index,structure->size,col);
+    printArray((*structure).index,(*structure).size,col);
     //Print data in array
     cout<<"The original data array"<<endl;
-    printArray(structure->array,structure->size,col);
+    printArray((*structure).array,(*structure).size,col);
     cout<<"The original data array using the indexed array"<<endl;
     printStructure(structure,col);
     //sort data using index, hence database sort
     sort(structure);
     cout<<"Sorted index array"<<endl;
     //Print structure/index
-    printArray(structure->index,structure->size,col);
+    printArray((*structure).index,(*structure).size,col);
     //Print data in array
     cout<<"Sorted data array"<<endl;
-    printArray(structure->array,structure->size,col);
+    printArray((*structure).array,(*structure).size,col);
     cout<<"Sorted data array using the indexed array"<<endl;
     printStructure(structure,col);
     return 0;
@@ -50,14 +52,14 @@ indexcolumn *fill(int n){
     //Allocate memory
     indexcolumn *col=new indexcolumn;
     if(n<=1)n=2;
-    col->size=n;
+    (*col).size=n;
     //Allocate pointers for array
-    col->array=new int[n];
-    col->index=new int[n];
+    (*col).array=new int[n];
+    (*col).index=new int[n];
     //Fill array
     for(int i=0;i<n;i++){
-        col->index[i]=i;
-        col->array[i]=rand()%90+10;
+        *((*col).index+i)=i;
+        *((*col).array+i)=rand()%90+10;
     }
     //return the allocated and filled structure
     return col;
@@ -65,8 +67,8 @@ indexcolumn *fill(int n){
 
 void printStructure(indexcolumn *a,int perLine){ //prints using indexes
     cout<<endl;
-    for(int i=0;i<a->size;i++){
-        cout<<a->array[a->index[i]]<<" ";
+    for(int i=0;i<(*a).size;i++){
+        cout<<(*a).array[(*a).index[i]]<<" ";
         if(i%perLine==(perLine-1))cout<<endl;
     }
     cout<<endl;
@@ -85,11 +87,11 @@ void sort(indexcolumn *a){
     //Pick position to sort
     for(int i=0;i<(*a).size-1;i++){             //THIS IS DOT OPERATOR
         //sort list by position
-        for(int j=i+1;j<a->size;j++){
-            if(a->array[a->index[i]]>a->array[a->index[j]]){
-                int temp=a->index[i];
-                a->index[i]=a->index[j];
-                a->index[j]=temp;
+        for(int j=i+1;j<(*a).size;j++){
+            if((*a).array[(*a).index[i]]>(*a).array[(*a).index[j]]){
+                int temp=*((*a).index+i);
+                *((*a).index+i)=*((*a).index+j);
+                *((*a).index+j)=temp;
             }
         }
     }
