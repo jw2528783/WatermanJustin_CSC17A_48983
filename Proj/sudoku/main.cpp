@@ -1,14 +1,17 @@
 /* 
  * File:   main.cpp
  * Author: Justin
- * Created on October 19, 2015, 1:46 PM
+ * Created on October 16, 2015, 1:46 PM
  *      Sudoku Game
  */
+
+//Last working on incorporating strings and/or character arrays. Go to rules funciton.
 
 #include <cstdlib>
 #include <iostream>
 #include <ctime>
 #include "numbers.h"
+#include <cstring>
 using namespace std;
 
 void print(numbers *,int,int);
@@ -18,32 +21,35 @@ void testing();
 void first(numbers *);
 numbers *array(int);
 void test(numbers *);
+void colcheck(char);
 
 int main(int argc, char** argv) {
     srand(static_cast<unsigned int>(time(0)));
-    int num[81],answer,newnum,size=81,row;
-    //rules();
+    int num[80],answer,newnum,size=81,row;
+    rules();
     numbers *grid=array(size);
-    for(int i=0;i<=81;i++)num[i]=rand()%9+1;
     char col;
     //testing();
     first(grid);
     while(col!='X'){
+        answer=0;
         cout<<endl<<endl;
         cout<<"Enter the column. Use a Capital letter."<<endl;
         cin>>col;
-        if(col=='X')break;
-        cout<<"Enter the row."<<endl;
+        if(col=='X'||col=='x')break;
+        colcheck(col);
+        cout<<"Now enter the row."<<endl;
         cin>>row;
-        cout<<"Enter the number that should be in that position."<<endl;
+        cout<<"Now enter the number that should be in that position."<<endl;
         cin>>newnum;
         answer=input(col,row,grid);
-        print(grid,answer,newnum);
+        if(answer==-1)first(grid);
+        else print(grid,answer,newnum);
     }
     cout<<"You entered an 'X'"
-            "\nNow I will check your grid to see if you are correct."<<endl;
+            "\nNow I will check your grid to see if you are correct...\n"<<endl;
     test(grid);
-    cout<<"-----DONE-----"<<endl;
+    cout<<"\n-----DONE-----"<<endl;
     delete []grid->data;
     delete grid;
     
@@ -62,7 +68,8 @@ numbers *array(int n){
 
 int input(char col,int row,numbers *x){
     int pos;
-    if(col=='X')cout<<"Error. Inputted X."<<endl;
+    cout<<endl;
+    if(col=='X'||col=='x')cout<<"Error. Inputted X."<<endl;
     if(col=='A')pos=0;
     if(col=='B')pos=1;
     if(col=='C')pos=2;
@@ -72,6 +79,15 @@ int input(char col,int row,numbers *x){
     if(col=='G')pos=6;
     if(col=='H')pos=7;
     if(col=='I')pos=8;
+    if(col=='a')pos=0;
+    if(col=='b')pos=1;
+    if(col=='c')pos=2;
+    if(col=='d')pos=3;
+    if(col=='e')pos=4;
+    if(col=='f')pos=5;
+    if(col=='g')pos=6;
+    if(col=='h')pos=7;
+    if(col=='i')pos=8;
     if(row==1)pos=pos+(9*0);
     if(row==2)pos=pos+(9*1);
     if(row==3)pos=pos+(9*2);
@@ -82,25 +98,26 @@ int input(char col,int row,numbers *x){
     if(row==8)pos=pos+(9*7);
     if(row==9)pos=pos+(9*8);
     for(int i=0;i<41;i++){
-        if(pos==x->stock[i])
-            cout<<"Error. You can't change a stock number."<<endl;
+        if(pos==x->stock[i]){
+            cout<<endl<<"Error. You can't change a stock number."<<endl;
+            return -1;
+        }
     }
     return pos;
 }
 
 void first(numbers *x){
-    //Temp easy sudoku problem
-    cout<<endl<<endl<<endl<<"  A  B  C  D  E  F  G  H  I  "<<endl<<endl;
-    cout<<" ---------------------------- "<<endl;
+    cout<<endl<<endl<<endl<<"      A  B  C  D  E  F  G  H  I  "<<endl<<endl;
+    cout<<"     ---------------------------- "<<endl;
     for(int i=0;i<9;i++){
-        cout<<"| "; //Pushes whole grid to the right by one space
+        cout<<i+1<<"   | "; //Pushes whole grid to the right by one space
         for(int j=0;j<9;j++){
             if(x->data[i*9+j]==0)cout<<"-  ";
             else cout<<x->data[i*9+j]<<"  ";
         }
-        cout<<"|    "<<i+1<<endl;
+        cout<<"|   "<<i+1<<endl;
     }
-    cout<<" ---------------------------- "<<endl;
+    cout<<"     ---------------------------- "<<endl;
 }
 
 void print(numbers *x,int answer,int newnum){
@@ -119,14 +136,21 @@ void print(numbers *x,int answer,int newnum){
 }
 
 void rules(){
-    cout<<"Hello. This is a Sudoku game."<<endl<<endl;
+    string name;
+    cout<<"Hello new player. Enter your name so I can remember you."<<endl;
+    getline(cin,name);
+    cout<<"\nWelcome "<<name<<endl<<endl;
+    cout<<"\nThis is a Sudoku game."<<endl<<endl;
     cout<<"Here is how the game works:"<<endl;
+    cout<<"---------------------------"<<endl;
     cout<<"You are given a partially filled 9x9 grid of numbers."<<endl;
     cout<<"You must fill the entire grid with numbers ranging from 1 to 9"<<endl;
-    cout<<"However no number must repeat more than once in the same row or column."<<endl;
-    cout<<"To input numbers in the grid, first input the capital letter of the"
-            " desired column, press enter, then input the corresponding number on "
-            "the right hand side of the grid to select the desired row."<<endl;
+    cout<<"However no number must repeat more than once in the same row or column.\n"<<endl;
+    cout<<"To input numbers in the grid:"<<endl;
+    cout<<"-----------------------------"<<endl;
+    cout<<"Enter the capital letter of the desired column."
+            "\nThen input the corresponding number on the right hand side "
+            "of the grid to select the desired row."<<endl;
     cout<<"Then enter the desired number that you would like to put in that position."<<endl;
     cout<<"When you think you are done, input the capital letter 'X' to see if you are"
             "correct."<<endl;
@@ -148,9 +172,16 @@ void rules(){
 }*/
 
 void test(numbers *x){
-    int total=0,total2=0,total3=0,total4=0,total5=0,total6=0;
+    int count=0,total=0,total2=0,total3=0,total4=0,total5=0,total6=0;
     int total7=0,total8=0,total9=0;
     int col=0,col2=0,col3=0,col4=0,col5=0,col6=0,col7=0,col8=0,col9=0;
+    for(int i=0;i<81;i++){
+        if(x->data[i]!=x->answer[i])count++;
+    }
+    if(count>0)cout<<"Error. You are wrong."<<endl<<endl<<endl;
+    else cout<<"You are correct! The puzzle is solved!"<<endl<<endl<<endl;
+    /*
+     *              //Loops and checks each column and row to see if equals 45
     for(int i=0;i<9;i++){
         total=total+x->data[i];
         total2=total2+x->data[i+9];
@@ -192,7 +223,20 @@ void test(numbers *x){
     if(col7==45)cout<<" Column 7 correct.";
     if(col8==45)cout<<" Column 8 correct.";
     if(col9==45)cout<<" Column 9 correct.";
+    */
     //for(int i=0;i<81;i++)cout<<total[i]<<" ";
+}
+
+void colcheck(char col){
+    if(col=='a')cout<<"\n...I would have preferred it if you used a CAPITAL letter...\n"<<endl;
+    if(col=='b')cout<<"\n...I would have preferred it if you used a CAPITAL letter...\n"<<endl;
+    if(col=='c')cout<<"\n...I would have preferred it if you used a CAPITAL letter...\n"<<endl;
+    if(col=='d')cout<<"\n...I would have preferred it if you used a CAPITAL letter...\n"<<endl;
+    if(col=='e')cout<<"\n...I would have preferred it if you used a CAPITAL letter...\n"<<endl;
+    if(col=='f')cout<<"\n...I would have preferred it if you used a CAPITAL letter...\n"<<endl;
+    if(col=='g')cout<<"\n...I would have preferred it if you used a CAPITAL letter...\n"<<endl;
+    if(col=='h')cout<<"\n...I would have preferred it if you used a CAPITAL letter...\n"<<endl;
+    if(col=='i')cout<<"\n...I would have preferred it if you used a CAPITAL letter...\n"<<endl;
 }
 
 /*
