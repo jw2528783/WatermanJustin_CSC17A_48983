@@ -13,7 +13,7 @@ using namespace std;
 
 void print(numbers *,int,int);
 void rules();
-int input(char,int);
+int input(char,int,numbers *);
 void testing();
 void first(numbers *);
 numbers *array(int);
@@ -35,8 +35,9 @@ int main(int argc, char** argv) {
         if(col=='X')break;
         cout<<"Enter the row."<<endl;
         cin>>row;
+        cout<<"Enter the number that should be in that position."<<endl;
         cin>>newnum;
-        answer=input(col,row);
+        answer=input(col,row,grid);
         print(grid,answer,newnum);
     }
     cout<<"You entered an 'X'"
@@ -59,7 +60,7 @@ numbers *array(int n){
     return x;
 }
 
-int input(char col,int row){
+int input(char col,int row,numbers *x){
     int pos;
     if(col=='X')cout<<"Error. Inputted X."<<endl;
     if(col=='A')pos=0;
@@ -80,6 +81,10 @@ int input(char col,int row){
     if(row==7)pos=pos+(9*6);
     if(row==8)pos=pos+(9*7);
     if(row==9)pos=pos+(9*8);
+    for(int i=0;i<41;i++){
+        if(pos==x->stock[i])
+            cout<<"Error. You can't change a stock number."<<endl;
+    }
     return pos;
 }
 
@@ -127,7 +132,7 @@ void rules(){
             "correct."<<endl;
 }
 
-void testing(){
+/*void testing(){
     int array[81],j=1;
     cout<<" A  B  C  D  E  F  G  H  I  "<<endl<<endl;
     for(int i=0;i<81;i++){
@@ -140,15 +145,68 @@ void testing(){
         }
     }
     cout<<endl;
-}
+}*/
 
 void test(numbers *x){
-    int total,total2;
+    int total=0,total2=0,total3=0,total4=0,total5=0,total6=0;
+    int total7=0,total8=0,total9=0;
+    int col=0,col2=0,col3=0,col4=0,col5=0,col6=0,col7=0,col8=0,col9=0;
     for(int i=0;i<9;i++){
         total=total+x->data[i];
         total2=total2+x->data[i+9];
-        if(total==45)cout<<"Yeah correct!!!"<<endl;
-        if(total2==45)cout<<"Yeah correct again!!!"<<endl;
+        total3=total3+x->data[i+18];
+        total4=total4+x->data[i+27];
+        total5=total5+x->data[i+36];
+        total6=total6+x->data[i+45];
+        total7=total7+x->data[i+54];
+        total8=total8+x->data[i+63];
+        total9=total9+x->data[i+72];
     }
-    
+    for(int i=0;i<9;i++){
+        col=col+x->data[i*9];
+        col2=col2+x->data[(i*9)+1];
+        col3=col3+x->data[(i*9)+2];
+        col4=col4+x->data[(i*9)+3];
+        col5=col5+x->data[(i*9)+4];
+        col6=col6+x->data[(i*9)+5];
+        col7=col7+x->data[(i*9)+6];
+        col8=col8+x->data[(i*9)+7];
+        col9=col9+x->data[(i*9)+8];
+    }
+    if(total==45)cout<<"Row 1 correct.";
+    if(total2==45)cout<<" Row 2 correct.";
+    if(total3==45)cout<<" Row 3 correct.";
+    if(total4==45)cout<<" Row 4 correct.";
+    if(total5==45)cout<<" Row 5 correct.";
+    if(total6==45)cout<<" Row 6 correct.";
+    if(total7==45)cout<<" Row 7 correct.";
+    if(total8==45)cout<<" Row 8 correct.";
+    if(total9==45)cout<<" Row 9 correct.";
+    cout<<endl;
+    if(col==45)cout<<"Column 1 correct.";
+    if(col2==45)cout<<" Column 2 correct.";
+    if(col3==45)cout<<" Column 3 correct.";
+    if(col4==45)cout<<" Column 4 correct.";
+    if(col5==45)cout<<" Column 5 correct.";
+    if(col6==45)cout<<" Column 6 correct.";
+    if(col7==45)cout<<" Column 7 correct.";
+    if(col8==45)cout<<" Column 8 correct.";
+    if(col9==45)cout<<" Column 9 correct.";
+    //for(int i=0;i<81;i++)cout<<total[i]<<" ";
 }
+
+/*
+ * //This is what the grid should look like
+ * 
+             A  B  C  D  E  F  G  H  I  
+
+             0  1  2  3  4  5  6  7  8       1
+             9 10 11 12 13 14 15 16 17       2
+            18 19 20 21 22 23 24 25 26       3
+            27 28 29 30 31 32 33 34 35       4
+            36 37 38 39 40 41 42 43 44       5
+            45 46 47 48 49 50 51 52 53       6
+            54 55 56 57 58 59 60 61 62       7
+            63 64 65 66 67 68 69 70 71       8
+            72 73 74 75 76 77 78 79 80       9
+*/
