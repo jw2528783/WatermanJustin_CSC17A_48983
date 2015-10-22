@@ -8,39 +8,55 @@
 #include <cstdlib>
 #include <iostream>
 #include <ctime>
+#include "numbers.h"
 using namespace std;
 
-void print(int *,int,int);
+void print(numbers *,int,int);
 void rules();
 int input(char,int);
-void test();
-void first();
+void testing();
+void first(numbers *);
+numbers *array(int);
+void test(numbers *);
 
 int main(int argc, char** argv) {
     srand(static_cast<unsigned int>(time(0)));
-    int num[81],answer,newnum;
-    //temp easy sudoku problem
-    int easy[81]={0,2,0,5,0,1,4,0,3,1,0,3,0,6,4,0,0,7,0,0,4,3,0,0,0,
-                5,1,4,0,0,0,0,0,5,1,6,0,6,0,0,1,3,0,4,0,7,1,0,0,
-                4,5,3,0,2,0,9,2,1,0,6,0,0,0,8,7,6,4,3,0,1,2,0,0,
-                0,0,0,7,0,6,0,0};
+    int num[81],answer,newnum,size=81,row;
     //rules();
+    numbers *grid=array(size);
     for(int i=0;i<=81;i++)num[i]=rand()%9+1;
     char col;
-    int row;
-    //test();
-    first();
+    //testing();
+    first(grid);
     while(col!='X'){
         cout<<endl<<endl;
+        cout<<"Enter the column. Use a Capital letter."<<endl;
         cin>>col;
         if(col=='X')break;
+        cout<<"Enter the row."<<endl;
         cin>>row;
         cin>>newnum;
         answer=input(col,row);
-        print(easy,answer,newnum);
+        print(grid,answer,newnum);
     }
+    cout<<"You entered an 'X'"
+            "\nNow I will check your grid to see if you are correct."<<endl;
+    test(grid);
     cout<<"-----DONE-----"<<endl;
+    delete []grid->data;
+    delete grid;
+    
     return 0;
+}
+
+numbers *array(int n){
+    numbers *x=new numbers;
+    x->size=n;
+    x->data=new int[x->size];
+    for(int i=0;i<x->size;i++){
+        x->data[i]=x->easy[i];
+    }
+    return x;
 }
 
 int input(char col,int row){
@@ -67,34 +83,30 @@ int input(char col,int row){
     return pos;
 }
 
-void first(){
+void first(numbers *x){
     //Temp easy sudoku problem
-    int easy[81]={0,2,0,5,0,1,4,0,3,1,0,3,0,6,4,0,0,7,0,0,4,3,0,0,0,
-                    5,1,4,0,0,0,0,0,5,1,6,0,6,0,0,1,3,0,4,0,7,1,0,0,
-                    4,5,3,0,2,0,9,2,1,0,6,0,0,0,8,7,6,4,3,0,1,2,0,0,
-                    0,0,0,7,0,6,0,0};
     cout<<endl<<endl<<endl<<"  A  B  C  D  E  F  G  H  I  "<<endl<<endl;
     cout<<" ---------------------------- "<<endl;
     for(int i=0;i<9;i++){
         cout<<"| "; //Pushes whole grid to the right by one space
         for(int j=0;j<9;j++){
-            if(easy[i*9+j]==0)cout<<"-  ";
-            else cout<<easy[i*9+j]<<"  ";
+            if(x->data[i*9+j]==0)cout<<"-  ";
+            else cout<<x->data[i*9+j]<<"  ";
         }
         cout<<"|    "<<i+1<<endl;
     }
     cout<<" ---------------------------- "<<endl;
 }
 
-void print(int *easy,int answer,int newnum){
-    easy[answer]=newnum;
+void print(numbers *x,int answer,int newnum){
+    x->data[answer]=newnum;
     cout<<endl<<endl<<endl<<"  A  B  C  D  E  F  G  H  I  "<<endl<<endl;
     cout<<" ---------------------------- "<<endl;
     for(int i=0;i<9;i++){
         cout<<"| "; //Pushes whole grid to the right by one space
         for(int j=0;j<9;j++){
-            if(easy[i*9+j]==0)cout<<"-  ";
-            else cout<<easy[i*9+j]<<"  ";
+            if(x->data[i*9+j]==0)cout<<"-  ";
+            else cout<<x->data[i*9+j]<<"  ";
         }
         cout<<"|    "<<i+1<<endl;
     }
@@ -115,7 +127,7 @@ void rules(){
             "correct."<<endl;
 }
 
-void test(){
+void testing(){
     int array[81],j=1;
     cout<<" A  B  C  D  E  F  G  H  I  "<<endl<<endl;
     for(int i=0;i<81;i++){
@@ -128,4 +140,15 @@ void test(){
         }
     }
     cout<<endl;
+}
+
+void test(numbers *x){
+    int total,total2;
+    for(int i=0;i<9;i++){
+        total=total+x->data[i];
+        total2=total2+x->data[i+9];
+        if(total==45)cout<<"Yeah correct!!!"<<endl;
+        if(total2==45)cout<<"Yeah correct again!!!"<<endl;
+    }
+    
 }
