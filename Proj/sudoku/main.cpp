@@ -1,17 +1,17 @@
 /* 
  * File:   main.cpp
- * Author: Justin
+ * Author: Justin Waterman
  * Created on October 16, 2015, 1:46 PM
- *      Sudoku Game
+ *      Project: Sudoku Game
  */
 
-//Last working on incorporating strings and/or character arrays. Go to rules funciton.
 
 #include <cstdlib>
 #include <iostream>
 #include <ctime>
 #include "numbers.h"
 #include <cstring>
+#include <iomanip>
 using namespace std;
 
 void print(numbers *,int,int);
@@ -136,10 +136,10 @@ void print(numbers *x,int answer,int newnum){
 }
 
 void rules(){
-    string name;
+    char name2[50];
     cout<<"Hello new player. Enter your name so I can remember you."<<endl;
-    getline(cin,name);
-    cout<<"\nWelcome "<<name<<endl<<endl;
+    cin.getline(name2,50);
+    cout<<"\nWelcome "<<name2<<endl<<endl;
     cout<<"\nThis is a Sudoku game."<<endl<<endl;
     cout<<"Here is how the game works:"<<endl;
     cout<<"---------------------------"<<endl;
@@ -156,7 +156,7 @@ void rules(){
             "correct."<<endl;
 }
 
-/*void testing(){
+void testing(){
     int array[81],j=1;
     cout<<" A  B  C  D  E  F  G  H  I  "<<endl<<endl;
     for(int i=0;i<81;i++){
@@ -169,7 +169,7 @@ void rules(){
         }
     }
     cout<<endl;
-}*/
+}
 
 void test(numbers *x){
     int count=0,total=0,total2=0,total3=0,total4=0,total5=0,total6=0;
