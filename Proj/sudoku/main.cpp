@@ -5,71 +5,92 @@
  *      Project: Sudoku Game
  */
 
-
+//System Libraries
 #include <cstdlib>
 #include <iostream>
 #include <ctime>
-#include "numbers.h"
 #include <cstring>
 #include <iomanip>
 using namespace std;
 
-void print(numbers *,int,int);
-void rules();
-int input(char,int,numbers *);
-void testing();
-void first(numbers *);
-numbers *array(int);
-void test(numbers *);
-void colcheck(char);
+//User Libraries
+#include "numbers.h"
+
+//Function Prototypes
+void print(numbers *,int,int);          //Prints the Sudoku grid
+void rules();                           //Prints rules for the game
+int input(char,int,numbers *,int);      //Determines what number the user wants to fill
+void first(numbers *);                  //Prints the Sudoku grid before any alterations
+numbers *array(int,int);                //Creates the structure array that holds sudoku info
+void test(numbers *,int);               //Tests to see if the puzzle is correct
+void colcheck(char);                    //Checks to see if you input correctly
 
 int main(int argc, char** argv) {
+    //Random Number seeder
     srand(static_cast<unsigned int>(time(0)));
-    int num[80],answer,newnum,size=81,row;
-    rules();
-    numbers *grid=array(size);
+    //Declare variables
+    int num[80],answer,newnum,size=81,row,random;
     char col;
-    //testing();
+    //Prints the rules of the game
+    rules();
+    //Generates a random number between 1 and 2 to determine which puzzle to display
+    random=rand()%2+1;
+    //Create structure and memory allocation
+    numbers *grid=array(size,random);
+    //Displays the unalterated sudoku grid
     first(grid);
+    //Loops asking the player to continually input/update the grid until finished
     while(col!='X'){
         answer=0;
         cout<<endl<<endl;
         cout<<"Enter the column. Use a Capital letter."<<endl;
         cin>>col;
+        //If user inputs 'X' then stop the loop
         if(col=='X'||col=='x')break;
+        //Check to see if the user input a valid character
         colcheck(col);
         cout<<"Now enter the row."<<endl;
         cin>>row;
         cout<<"Now enter the number that should be in that position."<<endl;
         cin>>newnum;
-        answer=input(col,row,grid);
+        //Determine the exact point in the array that the player wants to fill
+        answer=input(col,row,grid,random);
+        //If player made invalid input, state error and ask for new input
         if(answer==-1)first(grid);
+        //Otherwise print the sudoku grid with the updated numbers and positions
         else print(grid,answer,newnum);
     }
     cout<<"You entered an 'X'"
             "\nNow I will check your grid to see if you are correct...\n"<<endl;
-    test(grid);
+    //Test to see if player correctly solved the puzzle
+    test(grid,random);
     cout<<"\n-----DONE-----"<<endl;
+    //Delete memory allocation
     delete []grid->data;
     delete grid;
-    
     return 0;
 }
 
-numbers *array(int n){
+numbers *array(int n,int random){
+    //Memory Allocation
     numbers *x=new numbers;
     x->size=n;
     x->data=new int[x->size];
     for(int i=0;i<x->size;i++){
-        x->data[i]=x->easy[i];
+        //Determines which puzzle to use based on the random number generated in main
+        if(random==1)x->data[i]=x->easy[i];
+        if(random==2)x->data[i]=x->easy2[i];
     }
     return x;
 }
 
-int input(char col,int row,numbers *x){
+int input(char col,int row,numbers *x,int random){
+    //Declare variable as exact position
     int pos;
     cout<<endl;
+    //Check if inputted correct characters
     if(col=='X'||col=='x')cout<<"Error. Inputted X."<<endl;
+    //Set a number value to the inputted character
     if(col=='A')pos=0;
     if(col=='B')pos=1;
     if(col=='C')pos=2;
@@ -88,6 +109,7 @@ int input(char col,int row,numbers *x){
     if(col=='g')pos=6;
     if(col=='h')pos=7;
     if(col=='i')pos=8;
+    //Add number value to given row
     if(row==1)pos=pos+(9*0);
     if(row==2)pos=pos+(9*1);
     if(row==3)pos=pos+(9*2);
@@ -97,22 +119,35 @@ int input(char col,int row,numbers *x){
     if(row==7)pos=pos+(9*6);
     if(row==8)pos=pos+(9*7);
     if(row==9)pos=pos+(9*8);
+    //Check if inputted incorrect value
     for(int i=0;i<41;i++){
-        if(pos==x->stock[i]){
-            cout<<endl<<"Error. You can't change a stock number."<<endl;
-            return -1;
+        if(random==1){
+            if(pos==x->easystock[i]){
+                cout<<endl<<"Error. You can't change a stock number."<<endl;
+                return -1;
+            }
+        }
+        if(random==2){
+            if(pos==x->easy2stock[i]){
+                cout<<endl<<"Error. You can't change a stock number."<<endl;
+                return -1;
+            }
         }
     }
+    //The sum of the variable will be the exact number in the grid array that the user requested
     return pos;
 }
 
 void first(numbers *x){
+    //Formatting
     cout<<endl<<endl<<endl<<"      A  B  C  D  E  F  G  H  I  "<<endl<<endl;
     cout<<"     ---------------------------- "<<endl;
     for(int i=0;i<9;i++){
-        cout<<i+1<<"   | "; //Pushes whole grid to the right by one space
+        //Pushes whole grid to the right by one space
+        cout<<i+1<<"   | "; 
         for(int j=0;j<9;j++){
-            if(x->data[i*9+j]==0)cout<<"-  ";
+            //Makes output into 9x9 grid
+            if(x->data[i*9+j]==0)cout<<"-  "; 
             else cout<<x->data[i*9+j]<<"  ";
         }
         cout<<"|   "<<i+1<<endl;
@@ -121,12 +156,16 @@ void first(numbers *x){
 }
 
 void print(numbers *x,int answer,int newnum){
+    //Replace number in array with the desired inputted number
     x->data[answer]=newnum;
+    //Formatting
     cout<<endl<<endl<<endl<<"  A  B  C  D  E  F  G  H  I  "<<endl<<endl;
     cout<<" ---------------------------- "<<endl;
     for(int i=0;i<9;i++){
-        cout<<"| "; //Pushes whole grid to the right by one space
+        //Pushes whole grid to the right by one space
+        cout<<"| "; 
         for(int j=0;j<9;j++){
+            //Outputs array into 9x9 grid
             if(x->data[i*9+j]==0)cout<<"-  ";
             else cout<<x->data[i*9+j]<<"  ";
         }
@@ -136,9 +175,12 @@ void print(numbers *x,int answer,int newnum){
 }
 
 void rules(){
+    //Create character array for player name
     char name2[50];
     cout<<"Hello new player. Enter your name so I can remember you."<<endl;
+    //Input player's name, includes spaces and punctuation for up to 50 characters
     cin.getline(name2,50);
+    //Rules of game
     cout<<"\nWelcome "<<name2<<endl<<endl;
     cout<<"\nThis is a Sudoku game."<<endl<<endl;
     cout<<"Here is how the game works:"<<endl;
@@ -155,7 +197,7 @@ void rules(){
     cout<<"When you think you are done, input the capital letter 'X' to see if you are"
             "correct."<<endl;
 }
-
+/*
 void testing(){
     int array[81],j=1;
     cout<<" A  B  C  D  E  F  G  H  I  "<<endl<<endl;
@@ -169,65 +211,47 @@ void testing(){
         }
     }
     cout<<endl;
-}
-
-void test(numbers *x){
-    int count=0,total=0,total2=0,total3=0,total4=0,total5=0,total6=0;
-    int total7=0,total8=0,total9=0;
-    int col=0,col2=0,col3=0,col4=0,col5=0,col6=0,col7=0,col8=0,col9=0;
+}*/
+void test(numbers *x,int random){
+    //Create a counter for the check loop
+    int count=0;
+    //Loops and compares each inputted number with the correct answer number
     for(int i=0;i<81;i++){
-        if(x->data[i]!=x->answer[i])count++;
+        //If working with Problem 1
+        if(random==1){
+            if(x->data[i]!=x->easyanswer[i])count++;
+        }
+        //If working with Problem 2
+        if(random==2){
+            if(x->data[i]!=x->easy2answer[i])count++;
+        }
     }
-    if(count>0)cout<<"Error. You are wrong."<<endl<<endl<<endl;
+    //State if the person is wrong.
+    if(count>0){
+        cout<<"Error. You are wrong."<<endl<<endl<<endl;
+        //Output the correct sudoku grid with answers
+        cout<<"This is what the puzzle should have looked like."<<endl;
+        //Formatting
+        cout<<endl<<"      A  B  C  D  E  F  G  H  I  "<<endl<<endl;
+        cout<<"     ---------------------------- "<<endl;
+        for(int i=0;i<9;i++){
+            //Pushes whole grid to the right by one space
+            cout<<i+1<<"   | "; 
+            for(int j=0;j<9;j++){
+                //Makes output into 9x9 grid
+                if(random==1)cout<<x->easyanswer[i*9+j]<<"  ";
+                if(random==2)cout<<x->easy2answer[i*9+j]<<"  ";
+            }
+            cout<<"|   "<<i+1<<endl;
+        }
+        cout<<"     ---------------------------- "<<endl;
+    }
+    //State if the person is right.
     else cout<<"You are correct! The puzzle is solved!"<<endl<<endl<<endl;
-    /*
-     *              //Loops and checks each column and row to see if equals 45
-    for(int i=0;i<9;i++){
-        total=total+x->data[i];
-        total2=total2+x->data[i+9];
-        total3=total3+x->data[i+18];
-        total4=total4+x->data[i+27];
-        total5=total5+x->data[i+36];
-        total6=total6+x->data[i+45];
-        total7=total7+x->data[i+54];
-        total8=total8+x->data[i+63];
-        total9=total9+x->data[i+72];
-    }
-    for(int i=0;i<9;i++){
-        col=col+x->data[i*9];
-        col2=col2+x->data[(i*9)+1];
-        col3=col3+x->data[(i*9)+2];
-        col4=col4+x->data[(i*9)+3];
-        col5=col5+x->data[(i*9)+4];
-        col6=col6+x->data[(i*9)+5];
-        col7=col7+x->data[(i*9)+6];
-        col8=col8+x->data[(i*9)+7];
-        col9=col9+x->data[(i*9)+8];
-    }
-    if(total==45)cout<<"Row 1 correct.";
-    if(total2==45)cout<<" Row 2 correct.";
-    if(total3==45)cout<<" Row 3 correct.";
-    if(total4==45)cout<<" Row 4 correct.";
-    if(total5==45)cout<<" Row 5 correct.";
-    if(total6==45)cout<<" Row 6 correct.";
-    if(total7==45)cout<<" Row 7 correct.";
-    if(total8==45)cout<<" Row 8 correct.";
-    if(total9==45)cout<<" Row 9 correct.";
-    cout<<endl;
-    if(col==45)cout<<"Column 1 correct.";
-    if(col2==45)cout<<" Column 2 correct.";
-    if(col3==45)cout<<" Column 3 correct.";
-    if(col4==45)cout<<" Column 4 correct.";
-    if(col5==45)cout<<" Column 5 correct.";
-    if(col6==45)cout<<" Column 6 correct.";
-    if(col7==45)cout<<" Column 7 correct.";
-    if(col8==45)cout<<" Column 8 correct.";
-    if(col9==45)cout<<" Column 9 correct.";
-    */
-    //for(int i=0;i<81;i++)cout<<total[i]<<" ";
 }
 
 void colcheck(char col){
+    //Tell user that they inputted incorrectly, with some sarcasm.
     if(col=='a')cout<<"\n...I would have preferred it if you used a CAPITAL letter...\n"<<endl;
     if(col=='b')cout<<"\n...I would have preferred it if you used a CAPITAL letter...\n"<<endl;
     if(col=='c')cout<<"\n...I would have preferred it if you used a CAPITAL letter...\n"<<endl;
