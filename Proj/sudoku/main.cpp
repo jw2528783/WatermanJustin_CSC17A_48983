@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
         if(col=='R'||col=='r'){
             delete []grid->data;
             grid=array(size,random);
-            cout<<endl<<endl<<"RESTART"<<endl<<endl<<endl;
+            cout<<endl<<endl<<"\tRESTART"<<endl<<endl<<endl;
             first(grid);
             cout<<"Enter the column. Use a Capital letter."<<endl;
             cin>>col;
@@ -150,39 +150,49 @@ int input(char col,int row,numbers *x,int random){
 }
 
 void first(numbers *x){
+    int j=1;
     //Formatting
-    cout<<endl<<endl<<endl<<"      A  B  C  D  E  F  G  H  I  "<<endl<<endl;
-    cout<<"     ---------------------------- "<<endl;
-    for(int i=0;i<9;i++){
-        //Pushes whole grid to the right by one space
-        cout<<i+1<<"   | "; 
-        for(int j=0;j<9;j++){
-            //Makes output into 9x9 grid
-            if(x->data[i*9+j]==0)cout<<"-  "; 
-            else cout<<x->data[i*9+j]<<"  ";
+    cout<<endl<<endl<<endl<<"       A  B  C   D  E  F   G  H  I  "<<endl<<endl;
+    cout<<"     ------------------------------- "<<endl<<"    |  ";
+    for(int i=0;i<81;i++){
+        if(x->data[i]==0)cout<<"-  ";
+        else cout<<x->data[i]<<"  ";
+        if(i%3==2&&i%9!=8)cout<<" ";
+        if(i%9==(9-1)){
+            if(i==80)cout<<"|    "<<j<<endl;
+            else{ 
+                cout<<"|    "<<j<<endl;
+                if(j%3==0)cout<<"    |  "<<endl;
+                cout<<"    |  ";
+            }
+            j++;
         }
-        cout<<"|   "<<i+1<<endl;
     }
-    cout<<"     ---------------------------- "<<endl;
+    cout<<"     ------------------------------- "<<endl;
 }
 
 void print(numbers *x,int answer,int newnum){
+    int j=1;
     //Replace number in array with the desired inputted number
     x->data[answer]=newnum;
     //Formatting
-    cout<<endl<<endl<<endl<<"      A  B  C  D  E  F  G  H  I  "<<endl<<endl;
-    cout<<"     ---------------------------- "<<endl;
-    for(int i=0;i<9;i++){
-        //Pushes whole grid to the right by one space
-        cout<<i+1<<"   | "; 
-        for(int j=0;j<9;j++){
-            //Outputs array into 9x9 grid
-            if(x->data[i*9+j]==0)cout<<"-  ";
-            else cout<<x->data[i*9+j]<<"  ";
+    cout<<endl<<endl<<endl<<"       A  B  C   D  E  F   G  H  I  "<<endl<<endl;
+    cout<<"     ------------------------------- "<<endl<<"    |  ";
+    for(int i=0;i<81;i++){
+        if(x->data[i]==0)cout<<"-  ";
+        else cout<<x->data[i]<<"  ";
+        if(i%3==2&&i%9!=8)cout<<" ";
+        if(i%9==(9-1)){
+            if(i==80)cout<<"|    "<<j<<endl;
+            else{ 
+                cout<<"|    "<<j<<endl;
+                if(j%3==0)cout<<"    |  "<<endl;
+                cout<<"    |  ";
+            }
+            j++;
         }
-        cout<<"|    "<<i+1<<endl;
     }
-    cout<<"     ---------------------------- "<<endl;
+    cout<<"     ------------------------------- "<<endl;
 }
 
 void rules(){
@@ -198,7 +208,9 @@ void rules(){
     cout<<"---------------------------"<<endl;
     cout<<"You are given a partially filled 9x9 grid of numbers."<<endl;
     cout<<"You must fill the entire grid with numbers ranging from 1 to 9"<<endl;
-    cout<<"However no number must repeat more than once in the same row or column.\n"<<endl;
+    cout<<"However no number must repeat more than once in the same row or column."<<endl;
+    cout<<"You will notice that the 9x9 grid is divided into smaller 3x3 grids. "
+            "Each 3x3 grid must contain the numbers 1 to 9 only once.\n"<<endl;
     cout<<"To input numbers in the grid:"<<endl;
     cout<<"-----------------------------"<<endl;
     cout<<"Enter the capital letter of the desired column."
