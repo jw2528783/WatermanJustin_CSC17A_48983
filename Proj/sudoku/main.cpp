@@ -47,6 +47,15 @@ int main(int argc, char** argv) {
         cin>>col;
         //If user inputs 'X' then stop the loop
         if(col=='X'||col=='x')break;
+        if(col=='R'||col=='r'){
+            delete []grid->data;
+            grid=array(size,random);
+            cout<<endl<<endl<<"RESTART"<<endl<<endl<<endl;
+            first(grid);
+            cout<<"Enter the column. Use a Capital letter."<<endl;
+            cin>>col;
+            if(col=='X'||col=='x')break;
+        }
         //Check to see if the user input a valid character
         colcheck(col);
         cout<<"Now enter the row."<<endl;
@@ -120,17 +129,19 @@ int input(char col,int row,numbers *x,int random){
     if(row==8)pos=pos+(9*7);
     if(row==9)pos=pos+(9*8);
     //Check if inputted incorrect value
-    for(int i=0;i<41;i++){
-        if(random==1){
+    if(random==1){
+        for(int i=0;i<41;i++){
             if(pos==x->easystock[i]){
                 cout<<endl<<"Error. You can't change a stock number."<<endl;
-                return -1;
+                return -1;  
             }
         }
-        if(random==2){
+    }
+    if(random==2){
+        for(int i=0;i<36;i++){
             if(pos==x->easy2stock[i]){
                 cout<<endl<<"Error. You can't change a stock number."<<endl;
-                return -1;
+                return -1;            
             }
         }
     }
@@ -159,11 +170,11 @@ void print(numbers *x,int answer,int newnum){
     //Replace number in array with the desired inputted number
     x->data[answer]=newnum;
     //Formatting
-    cout<<endl<<endl<<endl<<"  A  B  C  D  E  F  G  H  I  "<<endl<<endl;
-    cout<<" ---------------------------- "<<endl;
+    cout<<endl<<endl<<endl<<"      A  B  C  D  E  F  G  H  I  "<<endl<<endl;
+    cout<<"     ---------------------------- "<<endl;
     for(int i=0;i<9;i++){
         //Pushes whole grid to the right by one space
-        cout<<"| "; 
+        cout<<i+1<<"   | "; 
         for(int j=0;j<9;j++){
             //Outputs array into 9x9 grid
             if(x->data[i*9+j]==0)cout<<"-  ";
@@ -171,7 +182,7 @@ void print(numbers *x,int answer,int newnum){
         }
         cout<<"|    "<<i+1<<endl;
     }
-    cout<<" ---------------------------- "<<endl;
+    cout<<"     ---------------------------- "<<endl;
 }
 
 void rules(){
@@ -194,8 +205,11 @@ void rules(){
             "\nThen input the corresponding number on the right hand side "
             "of the grid to select the desired row."<<endl;
     cout<<"Then enter the desired number that you would like to put in that position."<<endl;
-    cout<<"When you think you are done, input the capital letter 'X' to see if you are"
-            "correct."<<endl;
+    cout<<"You are able to overwrite numbers in the grid as well. However, you cannot overwrite "
+            "the original numbers included with the problem."<<endl;
+    cout<<"When you think you are done, input the capital letter 'X' when asked to enter a column"
+            " to see if you are correct."<<endl;
+    cout<<"If you want to restart the puzzle, enter 'R' when asked to input a column."<<endl;
 }
 /*
 void testing(){
