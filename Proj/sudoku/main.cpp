@@ -29,8 +29,9 @@ int main(int argc, char** argv) {
     //Random Number seeder
     srand(static_cast<unsigned int>(time(0)));
     //Declare variables
-    int num[80],answer,newnum,size=81,row,random;
+    int answer,newnum,size=81,row,random;
     char col;
+    string diff;
     //Prints the rules of the game
     rules();
     //Generates a random number between 1 and 2 to determine which puzzle to display
@@ -73,10 +74,20 @@ int main(int argc, char** argv) {
             "\nNow I will check your grid to see if you are correct...\n"<<endl;
     //Test to see if player correctly solved the puzzle
     test(grid,random);
+    cout<<endl<<endl<<"How hard was this puzzle?\n-easy?\n-medium?\n-hard?\nPlease enter "
+            "one of the three words above, exactly as shown, so I can keep "
+            "record of it."<<endl;
+    
+    cin>>diff;
+    if(diff=="easy")cout<<"Wow you are so smart for thinking this is easy."<<endl;
+    if(diff=="medium")cout<<"Not bad. It was an easier problem, but you did well."<<endl;
+    if(diff=="hard")cout<<"Keep playing my program, you'll be great in no time."<<endl;
     cout<<"\n-----DONE-----"<<endl;
     //Delete memory allocation
     delete []grid->data;
     delete grid;
+    cout<<&random;
+    //Exit
     return 0;
 }
 
@@ -198,7 +209,7 @@ void print(numbers *x,int answer,int newnum){
 void rules(){
     //Create character array for player name
     char name2[50];
-    cout<<"Hello new player. Enter your name so I can remember you."<<endl;
+    cout<<setw(2)<<"Hello new player. Enter your name so I can remember you."<<endl;
     //Input player's name, includes spaces and punctuation for up to 50 characters
     cin.getline(name2,50);
     //Rules of game
