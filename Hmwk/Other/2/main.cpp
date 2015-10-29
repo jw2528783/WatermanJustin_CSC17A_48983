@@ -26,8 +26,16 @@ int main(int argc, char** argv) {
         getline(cin,salary->employee[i]);
         cout<<"What is the pay rate for employee "<<salary->employee[i]<<"?"<<endl;
         cin>>salary->pay[i];
+        if(salary->pay[i]<0){
+            cout<<"Invalid pay."<<endl;
+            return 0;
+        }
         cout<<"How many hours did employee #"<<i+1<<" work?"<<endl;
         cin>>salary->hours[i];
+        if(salary->hours[i]<1){
+            cout<<"Invalid hours."<<endl;
+            return 0;
+        }
         total(salary,i);
         cin.ignore();
     }
