@@ -5,23 +5,16 @@
  */
 
 #include <iostream>
+#include <string>
+#include "pref.h"
 using namespace std;
 /*
-//PLAN
+//PLAN    --Things to do--
  * Best computer you can buy
  * Have class that holds benchmark data
  * Have class that holds various computer components and their prices
  * Have class that determines best price to performance based on those classes
- * Prompt for budget
- * Prompt for general purpose of machine
- * Prompt for how much ram they want
- * Prompt for how much hard drive space they want
- * Prompt for Intel or AMD processor preference
- * Prompt for NVidia or AMD graphics preference
- * Prompt for air cooling or water cooling preference
- * Prompt for big case or little case preference
- * Prompt for if they have monitor/keyboard/etc.
- * If not, then prompt for preference on monitor and keyboard and mouse
+
  * Compare preferences with budget and benchmarks
  * Determine best price to performance components
  * Output spec list
@@ -30,8 +23,22 @@ using namespace std;
  *      the parts can be expected to meet
  *  
 */
-int main(int argc, char** argv) {
+void intro();
 
+int main(int argc, char** argv) {
+    intro();
+    preference info;
+    
     return 0;
 }
 
+void intro(){
+    cout<<"-------------------------------------";
+    cout<<"\nSo you want to build a computer?..."<<endl;
+    cout<<"-------------------------------------"<<endl<<endl;
+    cout<<"...Well, today is your lucky day.\nI am your personal assistance"
+            " and advisor for today.\nYou can call me HAL 9001"<<endl;
+    cout<<"I will be helping youdetermining and assembling a computer"
+            " worthy of your demands.\nYou are welcome."<<endl;
+    cout<<"\nLet's get started."<<endl<<endl;
+}
