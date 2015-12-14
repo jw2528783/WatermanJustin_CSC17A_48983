@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include "pref.h"
+#include "parts.h"
 using namespace std;
 /*
 //PLAN    --Things to do--
@@ -26,8 +27,9 @@ using namespace std;
 void intro();
 
 int main(int argc, char** argv) {
+    parts info;
     intro();
-    preference info;
+    preference info2;
     
     return 0;
 }
@@ -38,7 +40,7 @@ void intro(){
     cout<<"-------------------------------------"<<endl<<endl;
     cout<<"...Well, today is your lucky day.\nI am your personal assistance"
             " and advisor for today.\nYou can call me HAL 9001"<<endl;
-    cout<<"I will be helping youdetermining and assembling a computer"
+    cout<<"I will be helping you determine and assemble a computer"
             " worthy of your demands.\nYou are welcome."<<endl;
     cout<<"\nLet's get started."<<endl<<endl;
 }
