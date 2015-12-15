@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=sudoku
+PROJECTNAME=sudoku2
 
 # Active Configuration
 DEFAULTCONF=Debug

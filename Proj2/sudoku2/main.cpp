@@ -18,7 +18,7 @@ using namespace std;
 
 //Function Prototypes
 void print(numbers *,int,int);          //Prints the Sudoku grid
-void rules();                           //Prints rules for the game
+void rules(char[]);                           //Prints rules for the game
 template <class t>
 int input(t,int,numbers *,int);      //Determines what number the user wants to fill
 void first(numbers *);                  //Prints the Sudoku grid before any alterations
@@ -27,8 +27,13 @@ void test(numbers *,int);               //Tests to see if the puzzle is correct
 void colcheck(char);                    //Checks to see if you input correctly
 
 int main(int argc, char** argv) {
+    //Create character array for player name
+    char name2[50];
+    cout<<setw(2)<<"Hello new player. Enter your name so I can remember you."<<endl;
+    //Input player's name, includes spaces and punctuation for up to 50 characters
+    cin.getline(name2,50);
     int again=1;
-    score info;
+    score<int> info;
     while(again==1){
         again=0;
         //Random Number seeder
@@ -38,9 +43,10 @@ int main(int argc, char** argv) {
         char col;
         string diff;
         //Prints the rules of the game
-        rules();
-        //Generates a random number between 1 and 2 to determine which puzzle to display
-        random=rand()%2+1;
+        rules(name2);
+        //Generates a random number between 1 and 3 to determine which puzzle to display
+        random=rand()%3+1;
+        //cout<<random<<endl;
         //Create structure and memory allocation
         numbers *grid=array(size,random);
         //Displays the unalterated sudoku grid
@@ -101,6 +107,7 @@ int main(int argc, char** argv) {
         cout<<endl<<endl<<"Do you want to play again?"<<endl;
         cout<<"Enter 0 for no and 1 for yes."<<endl;
         cin>>again;
+        //cin.ignore();
     }
     cout<<info.getaverage()<<"%"<<endl;
     //Exit
@@ -118,7 +125,14 @@ numbers *array(int n,int random){
             x->data[i]=x->easy[i];
         if(random==2)
             x->data[i]=x->easy2[i];
+        if(random==3)
+            x->data[i]=x->hard[i];
+        if(random==4)
+            x->data[i]=x->hard2[i];
     }
+    //for(int i=0;i<=81;i++){
+        //if(x->hard2[i]!=0)cout<<i<<",";
+    //}
     return x;
 }
 
@@ -257,6 +271,42 @@ int input(t col,int row,numbers *x,int random){
             }
         }
     }
+    if(random==3){
+        try{
+            for(int i=0;i<=25;i++){
+                    if(pos==x->hardstock[i]){
+                        string exception4= "Error. You can't change stock numbers.";
+                        throw exception4;
+                    }
+            }
+        }
+        catch(string exception4){
+            cout<<exception4;
+        }
+        for(int i=0;i<41;i++){
+            if(pos==x->hardstock[i]){
+                return -1;
+            }
+        }
+    }
+    if(random==4){
+        try{
+            for(int i=0;i<=28;i++){
+                    if(pos==x->hard2stock[i]){
+                        string exception5= "Error. You can't change stock numbers.";
+                        throw exception5;
+                    }
+            }
+        }
+        catch(string exception5){
+            cout<<exception5;
+        }
+        for(int i=0;i<41;i++){
+            if(pos==x->hard2stock[i]){
+                return -1;
+            }
+        }
+    }
     //The sum of the variable will be the exact number in the grid array that the user requested
     return pos;
 }
@@ -318,12 +368,7 @@ void print(numbers *x,int answer,int newnum){
     cout<<"     ------------------------------- "<<endl;
 }
 
-void rules(){
-    //Create character array for player name
-    char name2[50];
-    cout<<setw(2)<<"Hello new player. Enter your name so I can remember you."<<endl;
-    //Input player's name, includes spaces and punctuation for up to 50 characters
-    cin.getline(name2,50);
+void rules(char name2[50]){
     //Rules of game
     cout<<endl;
     cout<<"Welcome "<<name2<<endl<<endl;
@@ -380,6 +425,15 @@ void test(numbers *x,int random){
                 if(x->data[i]!=x->easy2answer[i])
                     count++;
             }
+            //If working with Problem 3
+            if(random==3){
+                if(x->data[i]!=x->hardanswer[i])
+                    count++;
+            }
+            if(random==4){
+                if(x->data[i]!=x->hard2answer[i])
+                    count++;
+            }
         }
     //State if the person is wrong.
     if(count>0){
@@ -398,6 +452,10 @@ void test(numbers *x,int random){
                     cout<<x->easyanswer[i*9+j]<<"  ";
                 if(random==2)
                     cout<<x->easy2answer[i*9+j]<<"  ";
+                if(random==3)
+                    cout<<x->hardanswer[i*9+j]<<"  ";
+                if(random==4)
+                    cout<<x->hard2answer[i*9+j]<<"  ";
             }
             cout<<"|   "<<i+1<<endl;
         }
@@ -473,4 +531,7 @@ void colcheck(char col){
             54 55 56 57 58 59 60 61 62       7
             63 64 65 66 67 68 69 70 71       8
             72 73 74 75 76 77 78 79 80       9
+ * 
+ * 
+ * 
 */
