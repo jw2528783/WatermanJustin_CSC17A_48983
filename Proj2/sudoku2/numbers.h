@@ -214,7 +214,7 @@ template <class s>
 class score{
     private:
         //Games correct
-        float right;
+        int right;
         //Games wrong
         int wrong;
         //Average of right and total games played
@@ -223,9 +223,10 @@ class score{
         float total;
     public:
         //Constructor
-        score();
+        score(float);
+        ~score();
         //Inline member functions
-        int getright(){return right;};
+        int getright() const{return right;};
         int getwrong(){return wrong;};
         int getaverage();
         void yay();
@@ -233,8 +234,32 @@ class score{
         void done();
 };
 
+class scorestuff{
+private:
+    void test5(){cout<<"";};
+    static int hi;
+    score<int> data;
+public:
+    scorestuff();
+    static int gethi(){hi=0;};
+    friend void hello(){cout<<"";};
+};
+
+class stuffderived: public scorestuff{
+public:
+    stuffderived();
+    ~stuffderived(){cout<<"";};
+    virtual void sayhi() const{cout<<"";};
+};
+
 template <class s>
-score<s>::score(){
+score<s>::~score(){
+    cout<<"";
+}
+
+template <class s>
+score<s>::score(float w){
+    w=average;
     right=0;
     wrong=0;
     average=0;

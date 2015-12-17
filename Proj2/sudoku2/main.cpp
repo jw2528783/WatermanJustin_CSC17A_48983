@@ -20,35 +20,40 @@ using namespace std;
 void print(numbers *,int,int);          //Prints the Sudoku grid
 void rules(char[]);                           //Prints rules for the game
 template <class t>
-int input(t,int,numbers *,int);      //Determines what number the user wants to fill
+int input(t,int,numbers *,int[],int);      //Determines what number the user wants to fill
 void first(numbers *);                  //Prints the Sudoku grid before any alterations
-numbers *array(int,int);                //Creates the structure array that holds sudoku info
-void test(numbers *,int);               //Tests to see if the puzzle is correct
+numbers *array(int,int[],int);                //Creates the structure array that holds sudoku info
+int test(numbers *,int[],int);               //Tests to see if the puzzle is correct
 void colcheck(char);                    //Checks to see if you input correctly
 
 int main(int argc, char** argv) {
     //Create character array for player name
     char name2[50];
+    int random[50],v=0;
     cout<<setw(2)<<"Hello new player. Enter your name so I can remember you."<<endl;
     //Input player's name, includes spaces and punctuation for up to 50 characters
     cin.getline(name2,50);
     int again=1;
-    score<int> info;
+    score<int> info(v);
+    score<int> *pointer;
+    pointer=new score<int>(v);
+    delete pointer;
+    for(int j=0;j<50;j++){
+        random[j]=rand()%4+1;
+    }
     while(again==1){
         again=0;
         //Random Number seeder
         srand(static_cast<unsigned int>(time(0)));
         //Declare variables
-        int answer,newnum,size=81,row,random;
+        int answer,newnum,size=81,row;
         char col;
         string diff;
         //Prints the rules of the game
         rules(name2);
         //Generates a random number between 1 and 3 to determine which puzzle to display
-        random=rand()%3+1;
-        //cout<<random<<endl;
         //Create structure and memory allocation
-        numbers *grid=array(size,random);
+        numbers *grid=array(size,random,v);
         //Displays the unalterated sudoku grid
         first(grid);
         //Loops asking the player to continually input/update the grid until finished
@@ -62,7 +67,7 @@ int main(int argc, char** argv) {
                 break;
             if(col=='R'||col=='r'){
                 delete []grid->data;
-                grid=array(size,random);
+                grid=array(size,random,v);
                 cout<<endl<<endl<<"\tRESTART"<<endl<<endl<<endl;
                 first(grid);
                 cout<<"Enter the column. Use a Capital letter."<<endl;
@@ -77,7 +82,7 @@ int main(int argc, char** argv) {
             cout<<"Now enter the number that should be in that position."<<endl;
             cin>>newnum;
             //Determine the exact point in the array that the player wants to fill
-            answer=input(col,row,grid,random);
+            answer=input(col,row,grid,random,v);
             //If player made invalid input, state error and ask for new input
             if(answer==-1)
                 first(grid);
@@ -87,12 +92,15 @@ int main(int argc, char** argv) {
         cout<<"You entered an 'X'"
                 "\nNow I will check your grid to see if you are correct...\n"<<endl;
         //Test to see if player correctly solved the puzzle
-        test(grid,random);
+        int temp;
+        temp=test(grid,random,v);
+        if(temp==0)info.no();
+        if(temp==1)info.yay();
         cout<<endl<<endl<<"How hard was this puzzle?\n-easy?\n-medium?\n-hard?\nPlease enter "
                 "one of the three words above, exactly as shown, so I can keep "
                 "record of it."<<endl;
-
-        cin>>diff;
+        cin.ignore();
+        getline(cin,diff);
         if(diff=="easy")
             cout<<"Wow you are so smart for thinking this is easy."<<endl;
         if(diff=="medium")
@@ -107,27 +115,28 @@ int main(int argc, char** argv) {
         cout<<endl<<endl<<"Do you want to play again?"<<endl;
         cout<<"Enter 0 for no and 1 for yes."<<endl;
         cin>>again;
-        //cin.ignore();
+        col='z';
+        v++;
     }
     cout<<info.getaverage()<<"%"<<endl;
     //Exit
     return 0;
 }
 
-numbers *array(int n,int random){
+numbers *array(int n,int random[],int v){
     //Memory Allocation
     numbers *x=new numbers;
     x->size=n;
     x->data=new int[x->size];
     for(int i=0;i<x->size;i++){
         //Determines which puzzle to use based on the random number generated in main
-        if(random==1)
+        if(random[v]==1)
             x->data[i]=x->easy[i];
-        if(random==2)
+        if(random[v]==2)
             x->data[i]=x->easy2[i];
-        if(random==3)
+        if(random[v]==3)
             x->data[i]=x->hard[i];
-        if(random==4)
+        if(random[v]==4)
             x->data[i]=x->hard2[i];
     }
     //for(int i=0;i<=81;i++){
@@ -137,7 +146,7 @@ numbers *array(int n,int random){
 }
 
 template <class t>
-int input(t col,int row,numbers *x,int random){
+int input(t col,int row,numbers *x,int random[],int v){
     //Declare variable as exact position
     int pos;
     cout<<endl;
@@ -235,7 +244,7 @@ int input(t col,int row,numbers *x,int random){
         pos=pos+(9*8);
     }
     //Check if inputted incorrect value
-    if(random==1){
+    if(random[v]==1){
         try{
             for(int i=0;i<41;i++){
                     if(pos==x->easystock[i]){
@@ -253,7 +262,7 @@ int input(t col,int row,numbers *x,int random){
             }
         }
     }
-    if(random==2){
+    if(random[v]==2){
         try{
             for(int i=0;i<36;i++){
                 if(pos==x->easy2stock[i]){
@@ -271,7 +280,7 @@ int input(t col,int row,numbers *x,int random){
             }
         }
     }
-    if(random==3){
+    if(random[v]==3){
         try{
             for(int i=0;i<=25;i++){
                     if(pos==x->hardstock[i]){
@@ -289,7 +298,7 @@ int input(t col,int row,numbers *x,int random){
             }
         }
     }
-    if(random==4){
+    if(random[v]==4){
         try{
             for(int i=0;i<=28;i++){
                     if(pos==x->hard2stock[i]){
@@ -409,34 +418,36 @@ void testing(){
     }
     cout<<endl;
 }*/
-void test(numbers *x,int random){
+int test(numbers *x,int random[],int v){
     //Create a counter for the check loop
     int count=0;
     int count2=0;
+    int good;
     //Loops and compares each inputted number with the correct answer number
         for(int i=0;i<81;i++){
             //If working with Problem 1
-            if(random==1){
+            if(random[v]==1){
                 if(x->data[i]!=x->easyanswer[i])
                     count++;
             }
             //If working with Problem 2
-            if(random==2){
+            if(random[v]==2){
                 if(x->data[i]!=x->easy2answer[i])
                     count++;
             }
             //If working with Problem 3
-            if(random==3){
+            if(random[v]==3){
                 if(x->data[i]!=x->hardanswer[i])
                     count++;
             }
-            if(random==4){
+            if(random[v]==4){
                 if(x->data[i]!=x->hard2answer[i])
                     count++;
             }
         }
     //State if the person is wrong.
     if(count>0){
+        good=0;
         cout<<"Error. You are wrong."<<endl;
         //Output the correct sudoku grid with answers
         cout<<"This is what the puzzle should have looked like."<<endl;
@@ -448,13 +459,13 @@ void test(numbers *x,int random){
             cout<<i+1<<"   | "; 
             for(int j=0;j<9;j++){
                 //Makes output into 9x9 grid
-                if(random==1)
+                if(random[v]==1)
                     cout<<x->easyanswer[i*9+j]<<"  ";
-                if(random==2)
+                if(random[v]==2)
                     cout<<x->easy2answer[i*9+j]<<"  ";
-                if(random==3)
+                if(random[v]==3)
                     cout<<x->hardanswer[i*9+j]<<"  ";
-                if(random==4)
+                if(random[v]==4)
                     cout<<x->hard2answer[i*9+j]<<"  ";
             }
             cout<<"|   "<<i+1<<endl;
@@ -465,7 +476,9 @@ void test(numbers *x,int random){
     else {
         cout<<"You are correct! The puzzle is solved!"<<endl<<endl<<endl;
         count2++;
+        good=1;
     }
+    return good;
 }
 
 void colcheck(char col){
